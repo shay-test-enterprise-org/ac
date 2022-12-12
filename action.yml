@@ -22,4 +22,3 @@ runs:
     - legitify
     - ${{ inputs.command }}
     - ${{ inputs.args }}
-    - ${{ inputs.github_token }}
