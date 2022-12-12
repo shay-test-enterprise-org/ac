@@ -15,7 +15,7 @@ inputs:
     description: "GitHub Personal Access Token"
 runs:
   using: "docker"
-  image: "docer://ghcr.io/legit-labs/legitify:latest"
+  image: "docker://ghcr.io/legit-labs/legitify:latest"
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
   args:
