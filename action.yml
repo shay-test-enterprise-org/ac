@@ -19,6 +19,5 @@ runs:
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
   args:
-    - legitify
     - ${{ inputs.command }}
     - ${{ inputs.args }}
