@@ -6,7 +6,7 @@ const zlib = require("zlib");
 const execSync = require("child_process").execSync;
 
 const DOWNLOAD_URL = "https://github.com/Legit-Labs/legitify/releases/download";
-const VERSION = "v0.1.6";
+const VERSION = "0.1.6";
 
 async function run() {
   try {
@@ -22,14 +22,8 @@ async function run() {
     console.log("downloading legitify");
     // Download the file from the URL
     const response = await fetch(
-      `${DOWNLOAD_URL}/${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
+      `${DOWNLOAD_URL}/v${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
     );
-
-    console.log(response.status, response.statusText);
-
-    if (response.headers.get("Content-Encoding") !== "gzip") {
-      throw new Error("Response is not gzip-compressed");
-    }
 
     const fileBuffer = await response.buffer();
 
