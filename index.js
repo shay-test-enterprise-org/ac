@@ -23,16 +23,18 @@ async function run() {
       `${DOWNLOAD_URL}/${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
     );
     const fileBuffer = await response.buffer();
-    console.log("extracting legitify");
-    // extract the archive to a directory called legitify
-    await tar.x({
-      file: fileBuffer,
-      C: "./",
-      strip: 1,
-    });
 
     // print current directory and its contents
     execSync("ls -la");
+
+    console.log("extracting legitify");
+    // extract the archive
+      await tar.x({
+        file: fileBuffer,
+        C: "./",
+      });
+    }
+
     // // make the binary executable
     // execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
     // // Run the binary with the specified command
