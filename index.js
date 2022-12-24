@@ -31,6 +31,8 @@ async function run() {
       cwd: ".",
     });
 
+    // print current directory and its contents
+    execSync("ls -la");
     // make the binary executable
     execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
     // Run the binary with the specified command
