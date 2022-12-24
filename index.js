@@ -24,6 +24,8 @@ async function run() {
     const response = await fetch(
       `${DOWNLOAD_URL}/v${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
     );
+    execSync(`ls -la`);
+    console.log(execSync(`ls -la`));
     const buffer = await response.buffer();
     // Extract the file from the tarball
     const extract = tar.extract();
