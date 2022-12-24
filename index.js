@@ -33,9 +33,11 @@ async function run() {
     });
     extract.on("finish", () => {
       // Make the file executable
-      execSync("chmod +x ./legitify");
+      execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
       // Run the command
-      execSync(`./legitify ${command} --github-token ${token}`);
+      execSync(
+        `GITHUB_TOKEN=${token} ./legitify_${VERSION}_linux_amd64/legitify ${command}`
+      );
     });
     // Unzip the file
     const gunzip = zlib.createGunzip();
