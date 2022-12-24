@@ -25,7 +25,7 @@ async function run() {
     const fileBuffer = await response.buffer();
 
     // print current directory and its contents
-    execSync("ls -la");
+    console.log(execSync("ls -la"));
 
     console.log("extracting legitify");
     // extract the archive
