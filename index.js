@@ -26,31 +26,26 @@ async function run() {
     );
     const fileBuffer = await response.buffer();
 
+    console.log("extracting legitify");
+    // Extract the tar stream from the gzip stream
     const tarStream = zlib.gunzipSync(fileBuffer);
-    const extract = tar.extract();
-    extract.on("entry", (header, stream, next) => {
+
+    // Create a extractor to extract the tar stream
+    const extractor = tar.extract();
+
+    // Listen for the 'entry' event to process each file in the tar archive
+    extractor.on("entry", (header, stream, callback) => {
+      // If the file name matches the file we want to extract, save it to the filesystem
       if (header.name === "legitify") {
-        stream.pipe(fs.createWriteStream("./legitify"));
+        const writeStream = fs.createWriteStream("legitify");
+        stream.pipe(writeStream);
       }
-      stream.on("end", () => {
-        next();
-      });
+      stream.on("end", callback);
       stream.resume();
     });
-    extract.on("finish", () => {
-      console.log("done extracting");
-    });
-    tarStream.pipe(extract);
 
-    // print current directory and its contents
-    console.log(execSync("ls -la"));
-
-    console.log("running legitify");
-    // // make the binary executable
-    // execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
-    // // Run the binary with the specified command
-    // console.log(`Running the '${command}' command`);
-    // execSync(`./legitify_${VERSION}_linux_amd64/legitify ${command}`);
+    // Start the extraction process
+    tarStream.pipe(extractor);
   } catch (error) {
     core.setFailed(error.message);
   }
