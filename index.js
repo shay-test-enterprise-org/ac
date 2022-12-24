@@ -44,17 +44,13 @@ async function run() {
     });
 
     console.log("finishing extraction");
-    // Listen for the 'finish' event to know when the tar stream has been fully processed
-    extractor.on("finish", () => {
-      // Make the file executable
-      fs.ch;
-      // Run the command and print to stdout
-      console.log("running legitify");
-      console.log(execSync(`./legitify ${command}`, { stdio: "inherit" }));
+    // Listen for the 'finish' event to know when the tar stream has been fully processed. do not continue until this event is fired
+    await new Promise((resolve, reject) => {
+      extractor.on("finish", resolve);
+      extractor.on("error", reject);
+      tarStream.pipe(extractor);
     });
-
-    // Pipe the tar stream into the extractor
-    tarStream.pipe(extractor);
+    console.log("after");
   } catch (error) {
     core.setFailed(error.message);
   }
