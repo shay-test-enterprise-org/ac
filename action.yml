@@ -1,23 +1,10 @@
-name: "Legitify"
-description: "Are you secured?"
-author: "Legit Security"
-branding:
-  icon: "alert-triangle"
-  color: "yellow"
+name: "Legitify Action"
+description: "Legitify"
 inputs:
   command:
-    description: "Which Legitify command to run, defaults to analyze"
+    description: "command to run"
+    required: false
     default: analyze
-  args:
-    description: "Additional arguments to pass to Legitify"
-  github_token:
-    required: true
-    description: "GitHub Personal Access Token"
 runs:
-  using: "docker"
-  image: "docker://ghcr.io/legit-labs/legitify:latest"
-  env:
-    GITHUB_TOKEN: ${{ inputs.github_token }}
-  args:
-    - ${{ inputs.command }}
-    - ${{ inputs.args }}
+  using: "node16"
+  main: "index.js"
