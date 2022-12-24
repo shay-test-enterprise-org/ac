@@ -11,7 +11,7 @@ async function run() {
     // Get the command input value
     const command = core.getInput("command") || "analyze";
     // Get the GitHub token input value, if it exists, otherwise exit
-    const token = core.getInput("token");
+    const token = core.getInput("github_token");
     if (!token) {
       core.setFailed("No GitHub token provided");
       return;
