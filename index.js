@@ -25,6 +25,8 @@ async function run() {
       `${DOWNLOAD_URL}/${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
     );
 
+    console.log(response.status, response.statusText);
+
     if (response.headers.get("Content-Encoding") !== "gzip") {
       throw new Error("Response is not gzip-compressed");
     }
