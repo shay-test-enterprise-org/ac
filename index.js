@@ -17,18 +17,18 @@ async function run() {
       return;
     }
 
-    console.log(`Running the '${command}' command`);
-
+    console.log("downloading legitify");
     // Download the file from the URL
     const response = await fetch(
       `${DOWNLOAD_URL}/${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
     );
     const fileBuffer = await response.buffer();
-
-    // Extract the tar file
-    tar.x({
+    console.log("extracting legitify");
+    // extract the archive to a directory called legitify
+    await tar.x({
       file: fileBuffer,
-      cwd: ".",
+      C: "./",
+      strip: 1,
     });
 
     // print current directory and its contents
@@ -36,6 +36,7 @@ async function run() {
     // // make the binary executable
     // execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
     // // Run the binary with the specified command
+    // console.log(`Running the '${command}' command`);
     // execSync(`./legitify_${VERSION}_linux_amd64/legitify ${command}`);
   } catch (error) {
     core.setFailed(error.message);
