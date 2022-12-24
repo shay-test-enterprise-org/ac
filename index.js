@@ -31,8 +31,9 @@ async function run() {
       cwd: ".",
     });
 
+    // make the binary executable
+    execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
     // Run the binary with the specified command
-
     execSync(`./legitify_${VERSION}_linux_amd64/legitify ${command}`);
   } catch (error) {
     core.setFailed(error.message);
