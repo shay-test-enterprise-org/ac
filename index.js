@@ -48,11 +48,8 @@ async function run() {
       // Make the file executable
       fs.ch;
       // Run the command and print to stdout
-      execSync(`./legitify ${command}`, { stdio: "inherit" });
+      console.log(execSync(`./legitify ${command}`, { stdio: "inherit" }));
     });
-
-    // print current directory and contents
-    execSync(`ls -la`, { stdio: "inherit" });
   } catch (error) {
     core.setFailed(error.message);
   }
