@@ -1,6 +1,8 @@
 const core = require("@actions/core");
 const fetch = require("node-fetch");
-const tar = require("tar");
+const fs = require("fs");
+const tar = require("tar-stream");
+const zlib = require("zlib");
 const execSync = require("child_process").execSync;
 
 const DOWNLOAD_URL = "https://github.com/Legit-Labs/legitify/releases/download";
@@ -24,15 +26,24 @@ async function run() {
     );
     const fileBuffer = await response.buffer();
 
+    const tarStream = zlib.gunzipSync(fileBuffer);
+    const extract = tar.extract();
+    extract.on("entry", (header, stream, next) => {
+      if (header.name === "legitify") {
+        stream.pipe(fs.createWriteStream("./legitify"));
+      }
+      stream.on("end", () => {
+        next();
+      });
+      stream.resume();
+    });
+    extract.on("finish", () => {
+      console.log("done extracting");
+    });
+    tarStream.pipe(extract);
+
     // print current directory and its contents
     console.log(execSync("ls -la"));
-
-    console.log("extracting legitify");
-    // extract the archive
-    await tar.x({
-      file: fileBuffer,
-      C: "./",
-    });
 
     console.log("running legitify");
     // // make the binary executable
