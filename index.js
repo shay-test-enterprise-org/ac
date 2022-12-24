@@ -29,12 +29,12 @@ async function run() {
 
     console.log("extracting legitify");
     // extract the archive
-      await tar.x({
-        file: fileBuffer,
-        C: "./",
-      });
-    }
+    await tar.x({
+      file: fileBuffer,
+      C: "./",
+    });
 
+    console.log("running legitify");
     // // make the binary executable
     // execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
     // // Run the binary with the specified command
