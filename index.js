@@ -19,7 +19,6 @@ async function run() {
       return;
     }
 
-    console.log("downloading legitify");
     // Download the file from the URL
     const response = await fetch(
       `${DOWNLOAD_URL}/v${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
@@ -48,9 +47,12 @@ async function run() {
     extractor.on("finish", () => {
       // Make the file executable
       fs.ch;
-      // Run the command
+      // Run the command and print to stdout
       execSync(`./legitify ${command}`, { stdio: "inherit" });
     });
+
+    // print current directory and contents
+    execSync(`ls -la`, { stdio: "inherit" });
   } catch (error) {
     core.setFailed(error.message);
   }
