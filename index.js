@@ -10,6 +10,12 @@ async function run() {
   try {
     // Get the command input value
     const command = core.getInput("command") || "analyze";
+    // Get the GitHub token input value, if it exists, otherwise exit
+    const token = core.getInput("token");
+    if (!token) {
+      core.setFailed("No GitHub token provided");
+      return;
+    }
 
     console.log(`Running the '${command}' command`);
 
@@ -25,7 +31,7 @@ async function run() {
       cwd: ".",
     });
 
-    // Run the file with the specified command
+    // Run the binary with the specified command
     execSync(`./legitify_${VERSION}_linux_amd64/legitify ${command}`);
   } catch (error) {
     core.setFailed(error.message);

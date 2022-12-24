@@ -5,6 +5,9 @@ inputs:
     description: "command to run"
     required: false
     default: analyze
+  github_token:
+    description: "GitHub token"
+    required: true
 runs:
   using: "node16"
   main: "index.js"
