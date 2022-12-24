@@ -33,10 +33,10 @@ async function run() {
 
     // print current directory and its contents
     execSync("ls -la");
-    // make the binary executable
-    execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
-    // Run the binary with the specified command
-    execSync(`./legitify_${VERSION}_linux_amd64/legitify ${command}`);
+    // // make the binary executable
+    // execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
+    // // Run the binary with the specified command
+    // execSync(`./legitify_${VERSION}_linux_amd64/legitify ${command}`);
   } catch (error) {
     core.setFailed(error.message);
   }
