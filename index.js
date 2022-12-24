@@ -24,6 +24,11 @@ async function run() {
     const response = await fetch(
       `${DOWNLOAD_URL}/${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
     );
+
+    if (response.headers.get("Content-Encoding") !== "gzip") {
+      throw new Error("Response is not gzip-compressed");
+    }
+
     const fileBuffer = await response.buffer();
 
     console.log("extracting legitify");
