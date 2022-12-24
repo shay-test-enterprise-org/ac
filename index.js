@@ -1,7 +1,7 @@
 const core = require("@actions/core");
-const fetch = require("node-fetch");
-const tar = require("tar");
-const { execSync } = require("child_process");
+const fetch = await import("node-fetch");
+const tar = await import("tar");
+const execSync = await import("child_process");
 
 const DOWNLOAD_URL = "https://github.com/Legit-Labs/legitify/releases/download";
 const VERSION = "v0.1.6";
