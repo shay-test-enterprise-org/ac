@@ -1,0 +1,22 @@
+{
+  "name": "ac",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shay-test-enterprise-org/ac.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shay-test-enterprise-org/ac/issues"
+  },
+  "homepage": "https://github.com/shay-test-enterprise-org/ac#readme",
+  "dependencies": {
+    "@actions/core": "^1.10.0"
+  }
+}
