@@ -13,7 +13,7 @@ async function run() {
     // Get the GitHub token input value, if it exists, otherwise exit
     const token = core.getInput("token");
     if (!token) {
-      setFailed("No GitHub token provided");
+      core.setFailed("No GitHub token provided");
       return;
     }
 
