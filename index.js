@@ -3,6 +3,7 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 const tar = require("tar-stream");
 const zlib = require("zlib");
+
 const execSync = require("child_process").execSync;
 
 const DOWNLOAD_URL = "https://github.com/Legit-Labs/legitify/releases/download";
@@ -32,25 +33,29 @@ async function run() {
     // Create a extractor to extract the tar stream
     const extractor = tar.extract();
 
-    // Listen for the 'entry' event to process each file in the tar archive
-    extractor.on("entry", (header, stream, callback) => {
-      // If the file name matches the file we want to extract, save it to the filesystem
-      if (header.name === "legitify") {
-        const writeStream = fs.createWriteStream("legitify");
-        stream.pipe(writeStream);
-      }
-      stream.on("end", callback);
-      stream.resume();
-    });
-
-    console.log("finishing extraction");
-    // Listen for the 'finish' event to know when the tar stream has been fully processed. do not continue until this event is fired
+    // Wait until file is fully extracted and ready to be executed
     await new Promise((resolve, reject) => {
-      extractor.on("finish", resolve);
-      extractor.on("error", reject);
+      extractor.on("entry", (header, stream, next) => {
+        // Only extract the legitify executable
+        if (header.name === "legitify") {
+          // Write the executable to the file system
+          stream.pipe(fs.createWriteStream("./legitify"));
+          stream.on("end", () => {
+            // Make the executable executable
+            execSync("chmod +x ./ ./legitify");
+            // Resolve the promise
+            resolve();
+          });
+        } else {
+          // Skip the entry
+          stream.resume();
+        }
+        // Move to the next entry
+        stream.on("end", next);
+      });
+      // Pipe the tar stream to the extractor
       tarStream.pipe(extractor);
     });
-    console.log("after");
   } catch (error) {
     core.setFailed(error.message);
   }
