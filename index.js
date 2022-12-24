@@ -27,7 +27,6 @@ async function run() {
 
     const fileBuffer = await response.buffer();
 
-    console.log("extracting legitify");
     // Extract the tar stream from the gzip stream
     const tarStream = zlib.gunzipSync(fileBuffer);
 
@@ -45,8 +44,13 @@ async function run() {
       stream.resume();
     });
 
-    // Start the extraction process
-    tarStream.pipe(extractor);
+    // Listen for the 'finish' event to know when the tar stream has been fully processed
+    extractor.on("finish", () => {
+      // Make the file executable
+      fs.ch;
+      // Run the command
+      execSync(`./legitify ${command}`, { stdio: "inherit" });
+    });
   } catch (error) {
     core.setFailed(error.message);
   }
