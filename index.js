@@ -71,9 +71,12 @@ function downloadAndExtract(fileUrl, filePath) {
     const file = fs.createWriteStream(filePath);
 
     // Send a GET request to the file URL and pipe the response to the write stream
-    request(fileUrl).on(
-      "error",
-      error.pipe(file).on("close", () => {
+    request(fileUrl)
+      .on("error", (error) => {
+        reject(error);
+      })
+      .pipe(file)
+      .on("close", () => {
         // Create a read stream for the downloaded file
         const readStream = fs.createReadStream(filePath);
 
@@ -88,8 +91,7 @@ function downloadAndExtract(fileUrl, filePath) {
           .on("finish", () => {
             resolve();
           });
-      })
-    );
+      });
   });
 }
 
