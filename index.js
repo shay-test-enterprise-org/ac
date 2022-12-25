@@ -98,7 +98,7 @@ async function run() {
             // Run the binary file
             const exec = require("child_process").exec;
             exec(
-              `GITHUB_TOKEN=${token}./legitify ${command}`,
+              `GITHUB_TOKEN=${token} ./legitify ${command}`,
               { stdio: "inherit" },
               (error, stdout) => {
                 if (error) {
