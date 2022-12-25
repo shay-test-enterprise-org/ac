@@ -28,7 +28,7 @@ async function uploadErrorLog(file) {
   const rootDirectory = "./";
   const files = [file];
   const options = {
-    continueOnError: true,
+    continueOnError: false,
   };
 }
 
