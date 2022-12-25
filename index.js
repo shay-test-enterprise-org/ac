@@ -3,8 +3,8 @@ const fs = require("fs");
 const zlib = require("zlib");
 const request = require("request");
 const tar = require("tar-fs");
-const artifact = require("@actions/artifact");
 const path = require("path");
+const fetch = require("node-fetch");
 
 /**
  * Fetches the URL for the Legitify release with a version that starts with the
