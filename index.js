@@ -3,6 +3,7 @@ const fs = require("fs");
 const zlib = require("zlib");
 const request = require("request");
 const tar = require("tar-fs");
+const artifact = require("@actions/artifact");
 
 function generateAnalyzeArgs(repo, owner) {
   let args = "";
