@@ -21,6 +21,17 @@ function generateAnalyzeArgs(repo, owner) {
   return args;
 }
 
+// upload legitify's error.log to github workflow artifacts
+async function uploadErrorLog(file) {
+  const artifactClient = artifact.create();
+  const artifactName = "legitify-error-log";
+  const rootDirectory = "./";
+  const files = [file];
+  const options = {
+    continueOnError: true,
+  };
+}
+
 async function run() {
   try {
     // Get the GitHub token input value, if it exists, otherwise exit
@@ -73,6 +84,10 @@ async function run() {
                 console.log(`${stdout}`);
               }
             );
+            // upload error.log if it exists
+            if (fs.existsSync("error.log")) {
+              uploadErrorLog("error.log");
+            }
           });
       });
   } catch (error) {
