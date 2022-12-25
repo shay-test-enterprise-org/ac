@@ -67,6 +67,7 @@ async function run() {
     const os = process.platform;
 
     // set file URL based on operating system
+    // TODO: delete this logic
     const fileUrl =
       os == "darwin"
         ? "https://github.com/Legit-Labs/legitify/releases/download/v0.1.6/legitify_0.1.6_darwin_arm64.tar.gz"
@@ -100,15 +101,18 @@ async function run() {
           .on("finish", () => {
             // Run the binary file
             const exec = require("child_process").exec;
-            exec(`./legitify ${command}`, (error, stdout, stderr) => {
-              console.log("running legitify");
-              if (error) {
-                console.error(`Exec error: ${error}`);
-                return;
+            exec(
+              `./legitify ${command}`,
+              { stdio: "inherit" },
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Exec error: ${error}`);
+                  return;
+                }
+                console.log(`Output: ${stdout}`);
+                console.log(`Error: ${stderr}`);
               }
-              console.log(`Output: ${stdout}`);
-              console.log(`Error: ${stderr}`);
-            });
+            );
           });
       });
   } catch (error) {
