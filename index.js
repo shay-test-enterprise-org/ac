@@ -51,6 +51,8 @@ async function run() {
     if (!token) {
       core.setFailed("No GitHub token provided");
       return;
+    } else {
+      process.env["GITHUB_TOKEN"] = token;
     }
 
     const owner = core.getInput("GITHUB_REPOSITORY_OWNER");
@@ -96,7 +98,6 @@ async function run() {
           .pipe(extractor)
           .pipe(tar.extract())
           .on("finish", () => {
-            console.log("File extracted");
             // Run the binary file
             const exec = require("child_process").exec;
             exec(`./legitify ${command}`, (error, stdout, stderr) => {
@@ -111,7 +112,6 @@ async function run() {
           });
       });
   } catch (error) {
-    console.log("failing");
     core.setFailed(error.message);
   }
 }
