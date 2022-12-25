@@ -11,10 +11,10 @@ inputs:
   repositories:
     description: "Strings of owner/repo. If this is set, only selected repositories will be analyzed"
     required: false
-  legitify_version:
-    description: "The version of legitify to use"
+  legitify_base_version:
+    description: "The base version of legitify to use. non breaking changes will be auto updated."
     required: false
-    default: "0.1.6"
+    default: "0.1"
 runs:
   using: "node16"
   main: "index.js"
