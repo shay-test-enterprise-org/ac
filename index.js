@@ -4,6 +4,7 @@ const zlib = require("zlib");
 const request = require("request");
 const https = require("https");
 const tar = require("tar-fs");
+const github = require("@actions/github");
 
 // isGitHubOrgOwner checks if the user is an owner of the GitHub organization
 // and returns true if they are, otherwise false
