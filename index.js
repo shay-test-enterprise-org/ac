@@ -51,8 +51,6 @@ async function run() {
     if (!token) {
       core.setFailed("No GitHub token provided");
       return;
-    } else {
-      process.env["GITHUB_TOKEN"] = token;
     }
 
     const owner = core.getInput("GITHUB_REPOSITORY_OWNER");
