@@ -85,8 +85,6 @@ async function run() {
       })
       .pipe(file)
       .on("close", () => {
-        console.log(`File downloaded to ${filePath}`);
-
         // Create a read stream for the downloaded file
         const readStream = fs.createReadStream(filePath);
 
@@ -101,12 +99,17 @@ async function run() {
           .on("finish", () => {
             // Run the binary file
             const exec = require("child_process").exec;
-            exec(`./legitify ${command}`, { stdio: "inherit" }, (error) => {
-              if (error) {
-                console.error(`Exec error: ${error}`);
-                return;
+            exec(
+              `./legitify ${command}`,
+              { stdio: "inherit" },
+              (error, stdout, stderr) => {
+                if (error) {
+                  console.error(`Exec error: ${error}`);
+                  return;
+                }
+                console.log(`${stdout}`);
               }
-            });
+            );
           });
       });
   } catch (error) {
