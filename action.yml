@@ -1,13 +1,20 @@
 name: "Legitify Action"
 description: "Legitify"
 inputs:
-  command:
-    description: "command to run"
-    required: false
-    default: analyze
   github_token:
     description: "GitHub token"
     required: true
+  analyze_self_only:
+    description: "If this is set, only the repo where this action is called from will be analyzed"
+    required: false
+    default: "false"
+  repositories:
+    description: "Strings of owner/repo. If this is set, only selected repositories will be analyzed"
+    required: false
+  legitify_version:
+    description: "The version of legitify to use"
+    required: false
+    default: "0.1.6"
 runs:
   using: "node16"
   main: "index.js"

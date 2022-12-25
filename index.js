@@ -2,15 +2,25 @@ const core = require("@actions/core");
 const fs = require("fs");
 const zlib = require("zlib");
 const request = require("request");
-const https = require("https");
 const tar = require("tar-fs");
-const github = require("@actions/github");
+
+function generateAnalyzeArgs() {
+  let args = "";
+  if (core.getInput("analyze_self_only") === "true") {
+    args += ` --repo ${repo}`;
+    return args;
+  }
+
+  if (core.getInput("repositories") !== "") {
+    args += ` --repo ${core.getInput("repositories")}`;
+    return args;
+  }
+
+  return args;
+}
 
 async function run() {
   try {
-    // Get the command input value
-    const command = core.getInput("command") || "analyze";
-
     // Get the GitHub token input value, if it exists, otherwise exit
     const token = core.getInput("github_token");
     if (!token) {
@@ -18,10 +28,13 @@ async function run() {
       return;
     }
 
+    const owner = process.env["GITHUB_REPOSITORY_OWNER"];
+    const repo = process.env["GITHUB_REPOSITORY"];
     const legitifyVersion = core.getInput("legitify_version");
     const fileUrl = `https://github.com/Legit-Labs/legitify/releases/download/v${legitifyVersion}/legitify_${legitifyVersion}_linux_amd64.tar.gz`;
-
     const filePath = "legitify.tar.gz";
+
+    const args = generateAnalyzeArgs();
 
     // Create a write stream for the downloaded file
     const file = fs.createWriteStream(filePath);
@@ -48,7 +61,7 @@ async function run() {
             // Run the binary file
             const exec = require("child_process").exec;
             exec(
-              `GITHUB_TOKEN=${token} ./legitify ${command}`,
+              `GITHUB_TOKEN=${token} ./legitify analyze ${args}`,
               { stdio: "inherit" },
               (error, stdout) => {
                 if (error) {
