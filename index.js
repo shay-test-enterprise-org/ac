@@ -4,7 +4,7 @@ const zlib = require("zlib");
 const request = require("request");
 const tar = require("tar-fs");
 
-function generateAnalyzeArgs() {
+function generateAnalyzeArgs(repo, owner) {
   let args = "";
   if (core.getInput("analyze_self_only") === "true") {
     args += ` --repo ${repo}`;
@@ -15,6 +15,8 @@ function generateAnalyzeArgs() {
     args += ` --repo ${core.getInput("repositories")}`;
     return args;
   }
+
+  args += ` --org ${owner}`;
 
   return args;
 }
@@ -34,7 +36,7 @@ async function run() {
     const fileUrl = `https://github.com/Legit-Labs/legitify/releases/download/v${legitifyVersion}/legitify_${legitifyVersion}_linux_amd64.tar.gz`;
     const filePath = "legitify.tar.gz";
 
-    const args = generateAnalyzeArgs();
+    const args = generateAnalyzeArgs(repo, owner);
 
     // Create a write stream for the downloaded file
     const file = fs.createWriteStream(filePath);
