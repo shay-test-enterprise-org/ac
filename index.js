@@ -1,13 +1,44 @@
 const core = require("@actions/core");
-const fetch = require("node-fetch");
 const fs = require("fs");
-const tar = require("tar-stream");
 const zlib = require("zlib");
+const request = require("request");
+const https = require("https");
+const tar = require("tar-fs");
 
-const execSync = require("child_process").execSync;
+// isGitHubOrgOwner checks if the user is an owner of the GitHub organization
+// and returns true if they are, otherwise false
+async function isGitHubOrgOwner(token, org) {
+  const options = {
+    hostname: "api.github.com",
+    path: `/orgs/${org}/memberships/${github.context.actor}`,
+    method: "GET",
+    headers: {
+      Authorization: `token ${token}`,
+      "User-Agent": "Legitify",
+    },
+  };
 
-const DOWNLOAD_URL = "https://github.com/Legit-Labs/legitify/releases/download";
-const VERSION = "0.1.6";
+  return new Promise((resolve, reject) => {
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        const response = JSON.parse(data);
+        if (response.state === "active") {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+    req.on("error", (error) => {
+      reject(error);
+    });
+    req.end();
+  });
+}
 
 async function run() {
   try {
@@ -20,33 +51,58 @@ async function run() {
       return;
     }
 
-    // Download the file from the URL
-    const response = await fetch(
-      `${DOWNLOAD_URL}/v${VERSION}/legitify_${VERSION}_linux_amd64.tar.gz`
-    );
+    const owner = core.getInput("GITHUB_REPOSITORY_OWNER");
 
-    console.log("response code is: ", response.status);
-    const buffer = await response.buffer();
-    // Extract the file from the tarball
-    const extract = tar.extract();
-    extract.on("entry", (header, stream, next) => {
-      stream.on("end", next);
-      stream.resume();
-    });
-    extract.on("finish", () => {
-      // Make the file executable
-      execSync(`chmod +x ./legitify_${VERSION}_linux_amd64/legitify`);
-      // Run the command
-      execSync(
-        `GITHUB_TOKEN=${token} ./legitify_${VERSION}_linux_amd64/legitify ${command}`
-      );
-    });
-    // Unzip the file
-    const gunzip = zlib.createGunzip();
-    gunzip.pipe(extract);
-    gunzip.write(buffer);
-    gunzip.end();
+    let isOwner = isGitHubOrgOwner(token, owner);
+    if (!isOwner) {
+      core.setFailed("User is not an owner of the GitHub organization");
+      return;
+    }
+
+    const fileUrl =
+      "https://github.com/Legit-Labs/legitify/releases/download/v0.1.6/legitify_0.1.6_darwin_arm64.tar.gz";
+    const filePath = "legitify.tar.gz";
+
+    // Create a write stream for the downloaded file
+    const file = fs.createWriteStream(filePath);
+
+    // Send a GET request to the file URL and pipe the response to the write stream
+    request(fileUrl)
+      .on("error", (error) => {
+        console.error(`Error downloading file: ${error.message}`);
+      })
+      .pipe(file)
+      .on("close", () => {
+        console.log(`File downloaded to ${filePath}`);
+
+        // Create a read stream for the downloaded file
+        const readStream = fs.createReadStream(filePath);
+
+        // Extract the tar.gz file using the zlib and tar-fs modules
+        const extractor = zlib.createGunzip();
+        readStream
+          .on("error", (error) => {
+            console.error(`Error reading file: ${error.message}`);
+          })
+          .pipe(extractor)
+          .pipe(tar.extract())
+          .on("finish", () => {
+            console.log("File extracted");
+            // Run the binary file
+            const exec = require("child_process").exec;
+            exec(`./legitify ${command}`, (error, stdout, stderr) => {
+              console.log("running legitify");
+              if (error) {
+                console.error(`Exec error: ${error}`);
+                return;
+              }
+              console.log(`Output: ${stdout}`);
+              console.log(`Error: ${stderr}`);
+            });
+          });
+      });
   } catch (error) {
+    console.log("failing");
     core.setFailed(error.message);
   }
 }
