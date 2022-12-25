@@ -101,18 +101,12 @@ async function run() {
           .on("finish", () => {
             // Run the binary file
             const exec = require("child_process").exec;
-            exec(
-              `./legitify ${command}`,
-              { stdio: "inherit" },
-              (error, stdout, stderr) => {
-                if (error) {
-                  console.error(`Exec error: ${error}`);
-                  return;
-                }
-                console.log(`Output: ${stdout}`);
-                console.log(`Error: ${stderr}`);
+            exec(`./legitify ${command}`, { stdio: "inherit" }, (error) => {
+              if (error) {
+                console.error(`Exec error: ${error}`);
+                return;
               }
-            );
+            });
           });
       });
   } catch (error) {
