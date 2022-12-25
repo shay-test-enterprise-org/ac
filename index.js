@@ -44,6 +44,7 @@ async function run() {
   try {
     // Get the command input value
     const command = core.getInput("command") || "analyze";
+
     // Get the GitHub token input value, if it exists, otherwise exit
     const token = core.getInput("github_token");
     if (!token) {
@@ -59,8 +60,15 @@ async function run() {
       return;
     }
 
+    // Get the operating system
+    const os = process.platform;
+
+    // set file URL based on operating system
     const fileUrl =
-      "https://github.com/Legit-Labs/legitify/releases/download/v0.1.6/legitify_0.1.6_darwin_arm64.tar.gz";
+      os == "darwin"
+        ? "https://github.com/Legit-Labs/legitify/releases/download/v0.1.6/legitify_0.1.6_darwin_arm64.tar.gz"
+        : "https://github.com/Legit-Labs/legitify/releases/download/v0.1.6/legitify_0.1.6_linux_amd64.tar.gz";
+
     const filePath = "legitify.tar.gz";
 
     // Create a write stream for the downloaded file
