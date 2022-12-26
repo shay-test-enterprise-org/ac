@@ -7,7 +7,7 @@ const path = require("path");
 const fetch = require("node-fetch");
 const exec = require("@actions/exec");
 
-async function executeLegitify(args) {
+async function executeLegitify(token, args) {
   myOutput = "";
   letmyError = "";
 
