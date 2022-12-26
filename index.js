@@ -140,6 +140,7 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
+  await exec.exec('"ls -la"');
   uploadArtifact("error.log");
 }
 
