@@ -21,8 +21,11 @@ async function executeLegitify(token, args) {
     },
   };
   options.env = { GITHUB_TOKEN: token };
-
-  await exec.exec('"./legitify"', ["analyze", args], options);
+  try {
+    await exec.exec('"./legitify"', ["analyze", args], options);
+  } catch (error) {
+    core.setFailed(error);
+  }
 }
 
 async function fetchLegitifyReleaseUrl(baseVersion) {
