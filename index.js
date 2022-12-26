@@ -43,11 +43,7 @@ async function executeLegitify(token, args) {
   };
   options.env = { GITHUB_TOKEN: token };
   try {
-    await exec.exec(
-      '"./legitify"',
-      ["analyze", "--repo", "owner/repo"],
-      options
-    );
+    await exec.exec('"./legitify"', ["analyze", "--repo owner/repo"], options);
   } catch (error) {
     core.setFailed(error);
   }
