@@ -9,11 +9,12 @@ const exec = require("@actions/exec");
 const { context } = require("@actions/github");
 const artifact = require("@actions/artifact");
 
-async function uploadArtifact(fileName) {
+async function uploadErrorLog() {
+  const fileName = "error.log";
   try {
     if (fs.existsSync(fileName)) {
       const client = artifact.create();
-      await client.uploadArtifact(fileName, fileName, ".", context.runId);
+      await client.uploadArtifact(fileName, [fileName], ".", context.runId);
       console.log(`Uploaded ${fileName} to the workflow artifact`);
     } else {
       console.log(`File ${fileName} does not exist so skipping upload`);
@@ -140,8 +141,8 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
-  await exec.exec('"ls -la"');
-  uploadArtifact("error.log");
+
+  uploadErrorLog();
 }
 
 run();
