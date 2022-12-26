@@ -22,7 +22,7 @@ async function executeLegitify(token, args) {
   };
   options.env = { GITHUB_TOKEN: token };
 
-  await exec.exec('"./legitify"', [args], options);
+  await exec.exec('"./legitify"', ["analyze", args], options);
 }
 
 async function fetchLegitifyReleaseUrl(baseVersion) {
