@@ -9,7 +9,7 @@ const exec = require("@actions/exec");
 
 async function executeLegitify(token, args) {
   let myOutput = "";
-  let letmyError = "";
+  let myError = "";
 
   const options = {};
   options.listeners = {
