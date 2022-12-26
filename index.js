@@ -6,11 +6,8 @@ const tar = require("tar-fs");
 const path = require("path");
 const fetch = require("node-fetch");
 const exec = require("@actions/exec");
-
-const { Action } = require("@actions/core");
 const { context } = require("@actions/github");
 const artifact = require("@actions/artifact");
-const fs = require("fs");
 
 async function uploadArtifact(fileName) {
   try {
