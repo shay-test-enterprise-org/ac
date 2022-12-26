@@ -7,6 +7,30 @@ const path = require("path");
 const fetch = require("node-fetch");
 const exec = require("@actions/exec");
 
+const { Action } = require("@actions/core");
+const { context } = require("@actions/github");
+const artifact = require("@actions/artifact");
+const fs = require("fs");
+
+async function uploadArtifact(fileName) {
+  try {
+    if (fs.existsSync(fileName)) {
+      const client = artifact.create();
+      await client.uploadArtifact(
+        fileName,
+        fileName,
+        context.repo,
+        context.runId
+      );
+      console.log(`Uploaded ${fileName} to the workflow artifact`);
+    } else {
+      console.log(`File ${fileName} does not exist`);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function executeLegitify(token, args) {
   let myOutput = "";
   let myError = "";
@@ -121,6 +145,7 @@ async function run() {
   } catch (error) {
     core.setFailed(error.message);
   }
+  uploadArtifact("error.log");
 }
 
 run();
