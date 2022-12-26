@@ -43,7 +43,7 @@ async function executeLegitify(token, args) {
   };
   options.env = { GITHUB_TOKEN: token };
   try {
-    await exec.exec('"./legitify"', ["analyze", "--repo owner/repo"], options);
+    await exec.exec('"./legitify"', ["analyze", args[0], args[1]], options);
   } catch (error) {
     core.setFailed(error);
   }
@@ -80,18 +80,21 @@ async function fetchLegitifyReleaseUrl(baseVersion) {
 }
 
 function generateAnalyzeArgs(repo, owner) {
-  let args = "";
+  let args = [];
   if (core.getInput("analyze_self_only") === "true") {
-    args += `--repo ${repo}`;
+    args.push("--repo");
+    args.push(repo);
     return args;
   }
 
   if (core.getInput("repositories") !== "") {
-    args += `--repo ${core.getInput("repositories")}`;
+    args.push("--repo");
+    args.push(core.getInput("repositories"));
     return args;
   }
 
-  args += `--org ${owner}`;
+  args.push("--org");
+  args.push(owner);
 
   return args;
 }
