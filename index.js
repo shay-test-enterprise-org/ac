@@ -8,8 +8,8 @@ const fetch = require("node-fetch");
 const exec = require("@actions/exec");
 
 async function executeLegitify(token, args) {
-  myOutput = "";
-  letmyError = "";
+  let myOutput = "";
+  let letmyError = "";
 
   const options = {};
   options.listeners = {
