@@ -22,7 +22,7 @@ async function executeLegitify(token, args) {
   };
   options.env = { GITHUB_TOKEN: token };
 
-  await exec.exec('"./legitify"', ["analyze", args], options);
+  await exec.exec('"./legitify"', [`analyze ${args}`], options);
 }
 
 async function fetchLegitifyReleaseUrl(baseVersion) {
@@ -58,16 +58,16 @@ async function fetchLegitifyReleaseUrl(baseVersion) {
 function generateAnalyzeArgs(repo, owner) {
   let args = "";
   if (core.getInput("analyze_self_only") === "true") {
-    args += ` --repo ${repo}`;
+    args += `--repo ${repo}`;
     return args;
   }
 
   if (core.getInput("repositories") !== "") {
-    args += ` --repo ${core.getInput("repositories")}`;
+    args += `--repo ${core.getInput("repositories")}`;
     return args;
   }
 
-  args += ` --org ${owner}`;
+  args += `--org ${owner}`;
 
   return args;
 }
