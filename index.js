@@ -21,7 +21,7 @@ async function uploadArtifact(fileName) {
       );
       console.log(`Uploaded ${fileName} to the workflow artifact`);
     } else {
-      console.log(`File ${fileName} does not exist`);
+      console.log(`File ${fileName} does not exist so skipping upload`);
     }
   } catch (error) {
     console.error(error);
@@ -43,7 +43,11 @@ async function executeLegitify(token, args) {
   };
   options.env = { GITHUB_TOKEN: token };
   try {
-    await exec.exec('"./legitify"', ["analyze", args], options);
+    await exec.exec(
+      '"./legitify"',
+      ["analyze", "--repo", "owner/repo"],
+      options
+    );
   } catch (error) {
     core.setFailed(error);
   }
