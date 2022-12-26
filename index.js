@@ -13,12 +13,7 @@ async function uploadArtifact(fileName) {
   try {
     if (fs.existsSync(fileName)) {
       const client = artifact.create();
-      await client.uploadArtifact(
-        fileName,
-        fileName,
-        context.repo,
-        context.runId
-      );
+      await client.uploadArtifact(fileName, fileName, ".", context.runId);
       console.log(`Uploaded ${fileName} to the workflow artifact`);
     } else {
       console.log(`File ${fileName} does not exist so skipping upload`);
