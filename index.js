@@ -21,8 +21,9 @@ async function executeLegitify(token, args) {
     },
   };
   options.cwd = "./";
+  options.env = { GITHUB_TOKEN: token };
 
-  await exec.exec(`GITHUB_TOKEN=${token} legitify`, [args], options);
+  await exec.exec("legitify", [args], options);
 }
 
 async function fetchLegitifyReleaseUrl(baseVersion) {
