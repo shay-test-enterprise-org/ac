@@ -20,10 +20,9 @@ async function executeLegitify(token, args) {
       myError += data.toString();
     },
   };
-  options.cwd = "./";
   options.env = { GITHUB_TOKEN: token };
 
-  await exec.exec("legitify", [args], options);
+  await exec.exec('"./legitify"', [args], options);
 }
 
 async function fetchLegitifyReleaseUrl(baseVersion) {
